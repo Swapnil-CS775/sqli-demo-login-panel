@@ -1,14 +1,13 @@
-# Use official PHP + Apache image
-FROM php:8.1-apache
+FROM php:8.2-apache
 
-# Copy all files to Apache root
-COPY . /var/www/html/
+# Install mysqli and other PHP extensions
+RUN docker-php-ext-install mysqli
 
-# Enable .htaccess rewrite rules (optional)
+# Enable Apache mod_rewrite (optional but good for dev)
 RUN a2enmod rewrite
 
-# Set working directory
-WORKDIR /var/www/html
+# Copy your code into the container
+COPY . /var/www/html/
 
-# Expose Apache port
-EXPOSE 80
+# Set proper permissions
+RUN chown -R www-data:www-data /var/www/html
